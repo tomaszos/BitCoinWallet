@@ -1,0 +1,56 @@
+CREATE TABLE users(
+	login VARCHAR(20) PRIMARY KEY,
+	password VARCHAR(255),
+	rest_key VARCHAR,
+	
+	UNIQUE(login)
+);
+
+CREATE TABLE type_coins(
+	type_coin_id INTEGER PRIMARY KEY,
+	name VARCHAR(50)
+);
+
+CREATE TABLE wallets(
+	code VARCHAR PRIMARY KEY,
+	type_coin_id INTEGER,
+	user_login VARCHAR(20),
+	date TIMESTAMP,
+
+	UNIQUE(type_coin_id,user_login),
+	FOREIGN KEY (type_coin_id) REFERENCES type_coins (type_coin_id),
+	FOREIGN KEY (user_login) REFERENCES users (login)
+);
+
+CREATE TABLE type_operations(
+	type_operation_id INTEGER PRIMARY KEY,
+	name VARCHAR(255),
+	
+	UNIQUE(name)
+);
+	
+
+CREATE TABLE history_operations(
+	user_login VARCHAR,
+	wallet_code VARCHAR,
+	operation_id INTEGER,
+	value DOUBLE PRECISION,
+	date TIMESTAMP,
+
+	FOREIGN KEY (user_login) REFERENCES users (login),
+	FOREIGN KEY (wallet_code) REFERENCES wallets (code),
+	FOREIGN KEY (operation_id) REFERENCES type_operations (type_operation_id)
+); 
+
+INSERT INTO users(login, password, rest_key) VALUES('jan_kowalski','pass111','vQsBlxQSyo/S7H0fUe7STSxJfKwBVRckJ8XeVTC2SNA=');
+INSERT INTO users(login, password, rest_key) VALUES('adam_kowalski','pass222','azx50/c7FXkVvuwx8hhDOdrhM+Gyuhny/57IiNk7ZjI=');
+INSERT INTO users(login, password, rest_key) VALUES('piotr_nowak','pass333','r5wQuDNqnK0eSp3YZuqhBIzKzTFDS0UyraTVPwH64Vo=');
+
+INSERT INTO type_operations (type_operation_id, name) VALUES (1,'wpłata');
+INSERT INTO type_operations (type_operation_id, name) VALUES (2,'wypłata');
+INSERT INTO type_operations (type_operation_id, name) VALUES (3,'przewalutowanie');
+
+INSERT INTO type_coins (type_coin_id, name) VALUES (1,'BitCoin');
+INSERT INTO type_coins (type_coin_id, name) VALUES (2,'LiteCoin');
+INSERT INTO type_coins (type_coin_id, name) VALUES (3,'PolishCoin');
+
