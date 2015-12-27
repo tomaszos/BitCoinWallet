@@ -8,7 +8,8 @@ CREATE TABLE users(
 
 CREATE TABLE type_coins(
 	type_coin_id INTEGER PRIMARY KEY,
-	name VARCHAR(50)
+	name VARCHAR(50),
+	exchangeDolar DOUBLE PRECISION
 );
 
 CREATE TABLE wallets(
@@ -50,7 +51,7 @@ INSERT INTO type_operations (type_operation_id, name) VALUES (1,'wpłata');
 INSERT INTO type_operations (type_operation_id, name) VALUES (2,'wypłata');
 INSERT INTO type_operations (type_operation_id, name) VALUES (3,'przewalutowanie');
 
-INSERT INTO type_coins (type_coin_id, name) VALUES (1,'BitCoin');
-INSERT INTO type_coins (type_coin_id, name) VALUES (2,'LiteCoin');
-INSERT INTO type_coins (type_coin_id, name) VALUES (3,'PolishCoin');
+INSERT INTO type_coins (type_coin_id, name, exchangeDolar) VALUES (1,'BitCoin',417.2);
+INSERT INTO type_coins (type_coin_id, name, exchangeDolar) VALUES (2,'LiteCoin',3.4);
+INSERT INTO type_coins (type_coin_id, name, exchangeDolar) VALUES (3,'Nubits',1.0);
 

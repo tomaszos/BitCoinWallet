@@ -13,8 +13,8 @@ import rest.model.Response;
 import rest.model.Wallet;
 import db.WalletDB;
 
-@Path("/walletServices")
-public class WalletServices {
+@Path("/walletService")
+public class WalletService {
 
 	@GET
 	@Path("/getWallet")

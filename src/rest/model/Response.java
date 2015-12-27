@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlRootElement(name = "response")
-@XmlSeeAlso({User.class, Wallet.class, HistoryOperation.class})
+@XmlSeeAlso({User.class, Wallet.class, HistoryOperation.class, TypeCoin.class})
 public class Response {
 
 	int status;

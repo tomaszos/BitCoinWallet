@@ -2,24 +2,30 @@ package rest.model;
 
 public class TypeCoin {
 
-	int type_coin_id;
 	String name;
+	double exchangeDolar;
 
-	TypeCoin(int type_coin_id, String name){
-		this.type_coin_id = type_coin_id;
+	public TypeCoin() {
+		// Must have no-argument constructor
+	}
+
+	public TypeCoin(String name, double exchangeDolar){
 		this.name = name;
+		this.exchangeDolar = exchangeDolar;
 	}
 
-	public int getType_coin_id() {
-		return type_coin_id;
-	}
-	public void setType_coin_id(int type_coin_id) {
-		this.type_coin_id = type_coin_id;
-	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public double getExchangeDolar() {
+		return exchangeDolar;
+	}
+
+	public void setExchangeDolar(double exchangeDolar) {
+		this.exchangeDolar = exchangeDolar;
 	}
 }
