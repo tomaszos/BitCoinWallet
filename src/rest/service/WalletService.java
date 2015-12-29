@@ -70,7 +70,7 @@ public class WalletService {
 	@Path("/createWallet")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response createWallet( @Context HttpHeaders headers,
-			@QueryParam("l") final String login, @QueryParam("type") final int typeCoin) {
+			@QueryParam("l") final String login, @QueryParam("typeCoin") final int typeCoin) {
 		Response response;
 
 		String restKey = Utils.getKeyFromHeaders(headers);

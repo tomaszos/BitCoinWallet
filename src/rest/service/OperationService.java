@@ -15,7 +15,9 @@ import javax.ws.rs.core.MediaType;
 
 import rest.model.HistoryOperation;
 import rest.model.Response;
+import utils.Utils;
 import db.HistoryOperationDB;
+import db.UserDB;
 
 @Path("/operationService")
 public class OperationService {
@@ -24,9 +26,17 @@ public class OperationService {
 	@Path("/payment")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response Payment( @Context HttpHeaders headers,
-			@QueryParam("l") final String userLogin, @QueryParam("coin") final int typeCoin, @QueryParam("value") final double value) {
+			@QueryParam("l") final String userLogin, @QueryParam("typeCoin") final int typeCoin, @QueryParam("value") final double value) {
 		Response response;
 
+		String restKey = Utils.getKeyFromHeaders(headers);
+		if(restKey == null){
+			return response = new Response(1,"Empty Key");
+		}
+		if(!UserDB.validRestKey(userLogin, restKey)){
+			return response = new Response(1,"Can't authorizations");
+		}
+		
 		String walletCode = userLogin + ":" + typeCoin;
 
 		boolean result = HistoryOperationDB.runOperation(userLogin, walletCode, value, 1);
@@ -44,6 +54,14 @@ public class OperationService {
 			@QueryParam("l") final String userLogin, @QueryParam("coin") final int typeCoin, @QueryParam("value") final double value) {
 		Response response;
 
+		String restKey = Utils.getKeyFromHeaders(headers);
+		if(restKey == null){
+			return response = new Response(1,"Empty Key");
+		}
+		if(!UserDB.validRestKey(userLogin, restKey)){
+			return response = new Response(1,"Can't authorizations");
+		}
+		
 		String walletCode = userLogin + ":" + typeCoin;
 
 		double saldo = HistoryOperationDB.getSaldo(userLogin, walletCode);
@@ -67,6 +85,14 @@ public class OperationService {
 			@QueryParam("l") final String userLogin, @QueryParam("fromCoin") final int fromCoin, @QueryParam("toCoin") final int toCoin, @QueryParam("value") final double value) {
 		Response response;
 
+		String restKey = Utils.getKeyFromHeaders(headers);
+		if(restKey == null){
+			return response = new Response(1,"Empty Key");
+		}
+		if(!UserDB.validRestKey(userLogin, restKey)){
+			return response = new Response(1,"Can't authorizations");
+		}
+		
 		String fromWalletCode = userLogin + ":" + fromCoin;
 		double saldo = HistoryOperationDB.getSaldo(userLogin, fromWalletCode);
 		if(value > saldo){

@@ -27,7 +27,7 @@ public class HistoryOperationService {
 	@Path("/historyOperations")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getHistoryOperations( @Context HttpHeaders headers,
-			@QueryParam("l") final String userLogin, @QueryParam("coin") final int typeCoin, @QueryParam("from") final String from, @QueryParam("to") final String to ) {
+			@QueryParam("l") final String userLogin, @QueryParam("typeCoin") final int typeCoin, @QueryParam("from") final String from, @QueryParam("to") final String to ) {
 		Response response;
 
 		String restKey = Utils.getKeyFromHeaders(headers);
