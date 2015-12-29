@@ -12,23 +12,28 @@ import rest.model.HistoryOperation;
 
 public class HistoryOperationDB {
 
-	public static List<HistoryOperation> getHistoryWallet(Date from, Date to, String login, String code){
+	public static List<HistoryOperation> getHistoryWallet(Date from, Date to, String login, int typeCoin){
 		Connection c = null;
 		Statement stmt = null;
 		List <HistoryOperation> historyOperations = new ArrayList<HistoryOperation>();
 
 		try {
 			c = ConnectionJDBC.createConnection();
+			String walletCode = login+":"+typeCoin;
+
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss");
+			String sFrom = sdf.format(from);
+			String sTo = sdf.format(to);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM history_operations LEFT JOIN type_operations ON operation_id = type_operation_id WHERE user_login = '"+login+"' AND wallet_code='"+code+"' AND (date BETWEEN "+from+" AND "+to+");");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM history_operations LEFT JOIN type_operations ON operation_id = type_operation_id WHERE user_login = '"+login+"' AND wallet_code='"+walletCode+"' AND (date BETWEEN '"+sFrom+"' AND '"+sTo+"');");
 			while ( rs.next() ) {
 			String userLogin = rs.getString("user_login");
-			String walletCode = rs.getString("wallet_code");
+			String sWalletCode = rs.getString("wallet_code");
 			String name = rs.getString("name");
 			double value = rs.getDouble("value");
 			Date date = rs.getDate("date");
-			historyOperations.add(new HistoryOperation (userLogin, walletCode, name, value, date));
+			historyOperations.add(new HistoryOperation (userLogin, sWalletCode, name, value, date));
 		}
 			rs.close();
 			stmt.close();
@@ -82,7 +87,6 @@ public class HistoryOperationDB {
 			String sDate = sdf.format(date);
 
 			String sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+userLogin+"','"+walletCode+"',"+operationType+",'"+sDate+"',"+value+");";
-			System.err.println("SQL: " + sql);
 			result = stmt.execute(sql);
 
 			stmt.close();
@@ -94,26 +98,59 @@ public class HistoryOperationDB {
 		return result;
 	}
 
-	public static double getExchangeDolar(String name){
+	public static boolean getExchangeDolar(String login, int fromTypeCoin, int toTypeCoin, double value){
 		Connection c = null;
 		Statement stmt = null;
-		double exchangeDolar = 0.0;
-
+		double fromExchange = 0.0;
+		double toExchange = 0.0;
+		String sql = null;
 		try {
 			c = ConnectionJDBC.createConnection();
+			String fromWalletCode = login +":"+fromTypeCoin;
+			String toWalletCode = login +":"+toTypeCoin;
 
 			stmt = c.createStatement();
 
-			ResultSet rs = stmt.executeQuery( "SELECT exchangeDolar FROM type_coins WHERE name= '"+name+"';" );
+			ResultSet rs = stmt.executeQuery( "SELECT type_coin_id, exchangeDolar FROM type_coins WHERE type_coin_id= "+fromTypeCoin+" OR type_coin_id= "+toTypeCoin+";" );
+
 			while ( rs.next() ) {
-			exchangeDolar = rs.getDouble("exchangeDolar");
-		}
+			int typeCoins = rs.getInt("type_coin_id");
+				if(typeCoins == fromTypeCoin){
+					fromExchange = rs.getDouble("exchangeDolar");
+				}else{
+					toExchange = rs.getDouble("exchangeDolar");
+				}
+			}
+
+			double tmp = (value * fromExchange) / toExchange;
+			double exchangeValue = Math.round(tmp*Math.pow(10, 2))/Math.pow(10, 2);;
+
 			rs.close();
+
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss");
+			String sDate = sdf.format(date);
+
+			sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+login+"','"+fromWalletCode+"',3,'"+sDate+"',"+(-value)+");";
+			int rowFromUpdate = stmt.executeUpdate(sql);
+
+			sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+login+"','"+toWalletCode+"',3,'"+sDate+"',"+exchangeValue+");";
+			int rowToUpdate =  stmt.executeUpdate(sql);
+
 			stmt.close();
+
+			if(rowFromUpdate != 1 || rowToUpdate != 1){
+				c.rollback();
+				c.close();
+				return false;
+			}
+
+			c.commit();
 			c.close();
 		} catch ( Exception e ) {
 			System.err.println( e.getClass().getName()+": "+ e.getMessage() );
 		}
-		return exchangeDolar;
+
+		return true;
 	}
 }

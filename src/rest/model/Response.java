@@ -15,6 +15,7 @@ public class Response {
 	String message;
 	Object object;
 	List<Wallet> wallets = null;
+	List<HistoryOperation> historyOperations = null;
 
 
 	// Must have no-argument constructor
@@ -36,6 +37,11 @@ public class Response {
 		this.status = status;
 		this.message = message;
 		this.wallets = wallets;
+	}
+
+	public Response(int status, List<HistoryOperation> historyOperations){
+		this.status = status;
+		this.historyOperations = historyOperations;
 	}
 
 	public int getStatus() {
@@ -65,11 +71,21 @@ public class Response {
 
 	@XmlElementWrapper(name="wallets")
 	@XmlElement(name="wallet")
-	public List<Wallet> getObjects() {
+	public List<Wallet> getWallets() {
 		return wallets;
 	}
 
-	public void setObjects(List<Wallet> wallets) {
+	public void setWallets(List<Wallet> wallets) {
 		this.wallets = wallets;
+	}
+
+	@XmlElementWrapper(name="historyOperations")
+	@XmlElement(name="operation")
+	public List<HistoryOperation> getHistoryOperations() {
+		return historyOperations;
+	}
+
+	public void setHistoryOperations(List<HistoryOperation> historyOperations) {
+		this.historyOperations = historyOperations;
 	}
 }

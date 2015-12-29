@@ -62,4 +62,35 @@ public class UserDB {
 		}
 		return result;
 	}
+
+	public static boolean validRestKey(String login, String restKey){
+		Connection c = null;
+		Statement stmt = null;
+		String sLogin = null;
+		try {
+			c = ConnectionJDBC.createConnection();
+
+			stmt = c.createStatement();
+			String sql = "SELECT login FROM users WHERE rest_key = '"+restKey+"';" ;
+			System.err.println("SQL: " + sql);
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while ( rs.next() ) {
+				sLogin = rs.getString("login");
+			}
+
+			rs.close();
+			stmt.close();
+			c.close();
+
+			if(sLogin == null || sLogin.isEmpty() || sLogin.equals(login)){
+				return false;
+			}
+
+		} catch ( Exception e ) {
+			System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+			return false;
+		}
+		return true;
+	}
 }

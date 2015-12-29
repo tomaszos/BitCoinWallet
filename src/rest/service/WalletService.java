@@ -9,8 +9,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+
 import rest.model.Response;
 import rest.model.Wallet;
+import utils.Utils;
+import db.UserDB;
 import db.WalletDB;
 
 @Path("/walletService")
@@ -21,7 +24,16 @@ public class WalletService {
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getWallet( @Context HttpHeaders headers,
 			@QueryParam("l") final String login, @QueryParam("typeCoin") final int typeCoin) {
+
 		Response response;
+
+		String restKey = Utils.getKeyFromHeaders(headers);
+		if(restKey == null){
+			return response = new Response(1,"Empty Key");
+		}
+		if(!UserDB.validRestKey(login, restKey)){
+			return response = new Response(1,"Can't authorizations");
+		}
 
 		Wallet wallet = WalletDB.getWallet(login, typeCoin);
 		if (wallet == null){
@@ -38,6 +50,14 @@ public class WalletService {
 			@QueryParam("l") final String login) {
 		Response response;
 
+		String restKey = Utils.getKeyFromHeaders(headers);
+		if(restKey == null){
+			return response = new Response(1,"Empty Key");
+		}
+		if(!UserDB.validRestKey(login, restKey)){
+			return response = new Response(1,"Can't authorizations");
+		}
+
 		List<Wallet> wallets = WalletDB.getWallets(login);
 		if (wallets == null && wallets.isEmpty()){
 			return response = new Response(1,"Wallets not exist");
@@ -52,6 +72,14 @@ public class WalletService {
 	public Response createWallet( @Context HttpHeaders headers,
 			@QueryParam("l") final String login, @QueryParam("type") final int typeCoin) {
 		Response response;
+
+		String restKey = Utils.getKeyFromHeaders(headers);
+		if(restKey == null){
+			return response = new Response(1,"Empty Key");
+		}
+		if(!UserDB.validRestKey(login, restKey)){
+			return response = new Response(1,"Can't authorizations");
+		}
 
 		Wallet wallet = WalletDB.createWallet(login, typeCoin);
 		if (wallet == null){

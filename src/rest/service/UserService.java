@@ -25,7 +25,7 @@ public class UserService {
 
 		User user = UserDB.getUserByLogin(login, password);
 		if (user == null){
-			return response = new Response(1,"User is null", user);
+			return response = new Response(1,"User is null");
 		}
 
 		return response = new Response(0,"", user);
