@@ -31,11 +31,15 @@ public class WalletDB {
 
 			int row = stmt.executeUpdate(sql);
 
-			if(row == 1){
-				wallet = new Wallet(code, typeCoin, login, date);
-			}
-
 			stmt.close();
+
+			if(row != 1){
+				c.rollback();
+				c.close();
+				return null;
+			}
+			wallet = new Wallet(code, typeCoin, login, date);
+
 			c.commit();
 			c.close();
 		} catch ( Exception e ) {

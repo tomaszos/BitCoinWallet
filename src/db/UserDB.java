@@ -43,16 +43,21 @@ public class UserDB {
 	public static boolean createUser(String login, String password){
 		Connection c = null;
 		Statement stmt = null;
-		boolean result = false;
 		try {
 			c = ConnectionJDBC.createConnection();
 			stmt = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
 			// dodać escapowanie stringów!!!
 			String sql = "INSERT INTO users(login, password, rest_key) VALUES('"+login+"','"+password+"','"+Utils.getEncrypted(login+":"+password)+"');";
-			result = stmt.execute(sql);
+			int row = stmt.executeUpdate(sql);
 
 			stmt.close();
+
+			if(row != 1){
+				c.rollback();
+				c.close();
+				return false;
+			}
 			c.commit();
 			c.close();
 
@@ -60,7 +65,7 @@ public class UserDB {
 			System.err.println( e.getClass().getName()+": "+ e.getMessage() );
 			return false;
 		}
-		return result;
+		return true;
 	}
 
 	public static boolean validRestKey(String login, String restKey){
@@ -72,7 +77,6 @@ public class UserDB {
 
 			stmt = c.createStatement();
 			String sql = "SELECT login FROM users WHERE rest_key = '"+restKey+"';" ;
-			System.err.println("SQL: " + sql);
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while ( rs.next() ) {

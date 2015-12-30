@@ -87,9 +87,14 @@ public class HistoryOperationDB {
 			String sDate = sdf.format(date);
 
 			String sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+userLogin+"','"+walletCode+"',"+operationType+",'"+sDate+"',"+value+");";
-			result = stmt.execute(sql);
-
+			int row = stmt.executeUpdate(sql);
 			stmt.close();
+
+			if(row != 1){
+				c.rollback();
+				c.close();
+				return false;
+			}
 			c.commit();
 			c.close();
 		} catch ( Exception e ) {
