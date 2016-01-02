@@ -64,7 +64,8 @@ public class WalletDB {
 				int typeCoinId = rs.getInt("type_coin_id");
 				String userLogin = rs.getString("user_login");
 				Date date = rs.getDate("date");
-				wallet = new Wallet(code,typeCoinId,userLogin,date);
+				Double saldo = HistoryOperationDB.getSaldo(userLogin, userLogin+":"+typeCoinId);
+				wallet = new Wallet(code,typeCoinId,userLogin, saldo, date);
 			}
 
 			stmt.close();
@@ -91,7 +92,8 @@ public class WalletDB {
 				int typeCoinId = rs.getInt("type_coin_id");
 				String userLogin = rs.getString("user_login");
 				Date date = rs.getDate("date");
-				wallets.add(new Wallet(code,typeCoinId,userLogin,date));
+				Double saldo = HistoryOperationDB.getSaldo(userLogin, userLogin+":"+typeCoinId);
+				wallets.add(new Wallet(code,typeCoinId,userLogin, saldo, date));
 			}
 
 			stmt.close();
