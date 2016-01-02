@@ -51,7 +51,7 @@ public class OperationService {
 	@Path("/payoff")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response Payoff( @Context HttpHeaders headers,
-			@QueryParam("l") final String userLogin, @QueryParam("coin") final int typeCoin, @QueryParam("value") final double value) {
+			@QueryParam("l") final String userLogin, @QueryParam("typeCoin") final int typeCoin, @QueryParam("value") final double value) {
 		Response response;
 
 		String restKey = Utils.getKeyFromHeaders(headers);

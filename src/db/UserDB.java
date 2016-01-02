@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.apache.tomcat.util.codec.binary.StringUtils;
-
 import rest.model.User;
 import utils.Utils;
 
@@ -87,7 +85,7 @@ public class UserDB {
 			stmt.close();
 			c.close();
 
-			if(sLogin == null || sLogin.isEmpty() || sLogin.equals(login)){
+			if(sLogin == null || sLogin.isEmpty() || !sLogin.equals(login)){
 				return false;
 			}
 

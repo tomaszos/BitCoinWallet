@@ -76,14 +76,13 @@ public class HistoryOperationDB {
 	public static boolean runOperation(String userLogin, String walletCode, double value, int operationType){
 		Connection c = null;
 		Statement stmt = null;
-		boolean result = false;
 
 		try {
 			c = ConnectionJDBC.createConnection();
 
 			stmt = c.createStatement();
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 			String sDate = sdf.format(date);
 
 			String sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+userLogin+"','"+walletCode+"',"+operationType+",'"+sDate+"',"+value+");";
@@ -99,8 +98,9 @@ public class HistoryOperationDB {
 			c.close();
 		} catch ( Exception e ) {
 			System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+			return false;
 		}
-		return result;
+		return true;
 	}
 
 	public static boolean getExchangeDolar(String login, int fromTypeCoin, int toTypeCoin, double value){

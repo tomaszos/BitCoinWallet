@@ -24,7 +24,7 @@ public class WalletService {
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getWallet( @Context HttpHeaders headers,
 			@QueryParam("l") final String login, @QueryParam("typeCoin") final int typeCoin) {
-
+		
 		Response response;
 
 		String restKey = Utils.getKeyFromHeaders(headers);
