@@ -38,7 +38,7 @@ public class HistoryOperationService {
 			return response = new Response(1,"Can't authorizations");
 		}
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY");
+		SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
 		Date fromDate;
 		Date toDate;
 		try {

@@ -61,7 +61,7 @@ public class HistoryOperationDB {
 			if(operationId == 1){
 				saldo += value;
 			}else{
-				saldo -= value;
+				saldo += value;
 			}
 		}
 			rs.close();
@@ -84,8 +84,11 @@ public class HistoryOperationDB {
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 			String sDate = sdf.format(date);
-
-			String sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+userLogin+"','"+walletCode+"',"+operationType+",'"+sDate+"',"+value+");";
+			String sql = null;
+			if (operationType==1)
+				sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+userLogin+"','"+walletCode+"',"+operationType+",'"+sDate+"',"+value+");";
+			else
+				sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+userLogin+"','"+walletCode+"',"+operationType+",'"+sDate+"',"+(-value)+");";
 			int row = stmt.executeUpdate(sql);
 			stmt.close();
 
@@ -133,7 +136,7 @@ public class HistoryOperationDB {
 			rs.close();
 
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
 			String sDate = sdf.format(date);
 
 			sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+login+"','"+fromWalletCode+"',3,'"+sDate+"',"+(-value)+");";
