@@ -49,7 +49,9 @@ public class HistoryOperationService {
 		}
 
 		List<HistoryOperation> historyOperations = HistoryOperationDB.getHistoryWallet(fromDate, toDate, userLogin, typeCoin);
-
-		return response = new Response(1, historyOperations);
+		if(historyOperations.size()<=0){
+			return response = new Response(1,"Empty list");
+		}
+		return response = new Response(0, historyOperations);
 	}
 }
