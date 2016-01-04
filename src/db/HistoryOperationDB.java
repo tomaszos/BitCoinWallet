@@ -21,13 +21,12 @@ public class HistoryOperationDB {
 			c = ConnectionJDBC.createConnection();
 			String walletCode = login+":"+typeCoin;
 
-			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
 			String sFrom = sdf.format(from);
 			String sTo = sdf.format(to);
 
 			stmt = c.createStatement();
 			String sql ="SELECT * FROM history_operations LEFT JOIN type_operations ON operation_id = type_operation_id WHERE user_login = '"+login+"' AND wallet_code='"+walletCode+"' AND (date BETWEEN '"+sFrom+"' AND '"+sTo+"');";
-			System.err.println("SQL: " + sql);
 			ResultSet rs = stmt.executeQuery(sql);
 			while ( rs.next() ) {
 			String userLogin = rs.getString("user_login");
@@ -78,7 +77,7 @@ public class HistoryOperationDB {
 
 			stmt = c.createStatement();
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
 			String sDate = sdf.format(date);
 			String sql = null;
 			if (operationType==1)
@@ -132,7 +131,7 @@ public class HistoryOperationDB {
 			rs.close();
 
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
 			String sDate = sdf.format(date);
 
 			sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+login+"','"+fromWalletCode+"',3,'"+sDate+"',"+(-value)+");";

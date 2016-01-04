@@ -22,7 +22,7 @@ public class WalletDB {
 
 			String code = login+":"+typeCoin;
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
 			String sDate = sdf.format(date);
 
 			String sql = "INSERT INTO wallets"
