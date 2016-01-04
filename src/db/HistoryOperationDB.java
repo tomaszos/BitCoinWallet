@@ -21,7 +21,7 @@ public class HistoryOperationDB {
 			c = ConnectionJDBC.createConnection();
 			String walletCode = login+":"+typeCoin;
 
-			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
 			String sFrom = sdf.format(from);
 			String sTo = sdf.format(to);
 
@@ -54,15 +54,9 @@ public class HistoryOperationDB {
 
 			stmt = c.createStatement();
 
-			ResultSet rs = stmt.executeQuery( "SELECT value, operation_id FROM history_operations WHERE wallet_code= '"+walletCode+"' AND user_login = '"+userLogin+"';" );
+			ResultSet rs = stmt.executeQuery( "SELECT SUM(value) FROM history_operations WHERE wallet_code= '"+walletCode+"' AND user_login = '"+userLogin+"';" );
 			while ( rs.next() ) {
-			double value = rs.getDouble("value");
-			int operationId = rs.getInt("operation_id");
-			if(operationId == 1){
-				saldo += value;
-			}else{
-				saldo += value;
-			}
+			saldo = rs.getDouble("sum");
 		}
 			rs.close();
 			stmt.close();
@@ -82,7 +76,7 @@ public class HistoryOperationDB {
 
 			stmt = c.createStatement();
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
 			String sDate = sdf.format(date);
 			String sql = null;
 			if (operationType==1)
