@@ -26,7 +26,9 @@ public class HistoryOperationDB {
 			String sTo = sdf.format(to);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM history_operations LEFT JOIN type_operations ON operation_id = type_operation_id WHERE user_login = '"+login+"' AND wallet_code='"+walletCode+"' AND (date BETWEEN '"+sFrom+"' AND '"+sTo+"');");
+			String sql ="SELECT * FROM history_operations LEFT JOIN type_operations ON operation_id = type_operation_id WHERE user_login = '"+login+"' AND wallet_code='"+walletCode+"' AND (date BETWEEN '"+sFrom+"' AND '"+sTo+"');";
+			System.err.println("SQL: " + sql);
+			ResultSet rs = stmt.executeQuery(sql);
 			while ( rs.next() ) {
 			String userLogin = rs.getString("user_login");
 			String sWalletCode = rs.getString("wallet_code");
