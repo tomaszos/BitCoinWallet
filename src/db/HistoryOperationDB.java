@@ -21,7 +21,7 @@ public class HistoryOperationDB {
 			c = ConnectionJDBC.createConnection();
 			String walletCode = login+":"+typeCoin;
 
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String sFrom = sdf.format(from);
 			String sTo = sdf.format(to);
 
@@ -77,7 +77,7 @@ public class HistoryOperationDB {
 
 			stmt = c.createStatement();
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String sDate = sdf.format(date);
 			String sql = null;
 			if (operationType==1)
@@ -131,7 +131,7 @@ public class HistoryOperationDB {
 			rs.close();
 
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String sDate = sdf.format(date);
 
 			sql = "INSERT INTO history_operations(user_login, wallet_code, operation_id, date, value) VALUES ('"+login+"','"+fromWalletCode+"',3,'"+sDate+"',"+(-value)+");";
