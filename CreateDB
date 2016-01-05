@@ -16,7 +16,7 @@ CREATE TABLE wallets(
 	code VARCHAR PRIMARY KEY,
 	type_coin_id INTEGER,
 	user_login VARCHAR(20),
-	date TIMESTAMP,
+	date DATE,
 
 	UNIQUE(type_coin_id,user_login),
 	FOREIGN KEY (type_coin_id) REFERENCES type_coins (type_coin_id),
@@ -36,7 +36,7 @@ CREATE TABLE history_operations(
 	wallet_code VARCHAR,
 	operation_id INTEGER,
 	value DOUBLE PRECISION,
-	date TIMESTAMP,
+	date DATE,
 
 	FOREIGN KEY (user_login) REFERENCES users (login),
 	FOREIGN KEY (wallet_code) REFERENCES wallets (code),
@@ -47,9 +47,9 @@ INSERT INTO users(login, password, rest_key) VALUES('jan_kowalski','pass111','vQ
 INSERT INTO users(login, password, rest_key) VALUES('adam_kowalski','pass222','azx50/c7FXkVvuwx8hhDOdrhM+Gyuhny/57IiNk7ZjI=');
 INSERT INTO users(login, password, rest_key) VALUES('piotr_nowak','pass333','r5wQuDNqnK0eSp3YZuqhBIzKzTFDS0UyraTVPwH64Vo=');
 
-INSERT INTO type_operations (type_operation_id, name) VALUES (1,'wpłata');
-INSERT INTO type_operations (type_operation_id, name) VALUES (2,'wypłata');
-INSERT INTO type_operations (type_operation_id, name) VALUES (3,'przewalutowanie');
+INSERT INTO type_operations (type_operation_id, name) VALUES (1,'Payment');
+INSERT INTO type_operations (type_operation_id, name) VALUES (2,'Payoff');
+INSERT INTO type_operations (type_operation_id, name) VALUES (3,'Exchange');
 
 INSERT INTO type_coins (type_coin_id, name, exchangeDolar) VALUES (1,'BitCoin',417.2);
 INSERT INTO type_coins (type_coin_id, name, exchangeDolar) VALUES (2,'LiteCoin',3.4);
